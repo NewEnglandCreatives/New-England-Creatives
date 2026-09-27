@@ -15,6 +15,13 @@
       "when": 1790492377997,
       "tag": "0001_hard_nitro",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790497000000,
+      "tag": "0002_andrews_pilot",
+      "breakpoints": true
     }
   ]
 }
