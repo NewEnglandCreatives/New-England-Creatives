@@ -34,8 +34,11 @@ export async function POST(request:Request){if(!authorized(request))return no();
   const monthly={Starter:400,Growth:650,Partner:1000}[p.package as "Starter"|"Growth"|"Partner"];const activation={Starter:150,Growth:200,Partner:300}[p.package as "Starter"|"Growth"|"Partner"];
   await database().prepare("INSERT INTO clients (id,company,contact,email,package,monthly_price,activation_fee,status,onboarding_status,access_status,content_cycle_status,approval_status,metricool_status,reporting_status,notes,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(id,p.company,String(p.contact||"TBD"),String(p.email||""),p.package,monthly,activation,"Pending signature","Not sent","Missing","Not started","Not started","Not connected","Not due",String(p.notes||""),now).run();
  }else if(p.kind==="content"&&typeof p.clientId==="string"&&typeof p.cycle==="string"&&Number.isInteger(p.number)){
+  if(Number(p.number)<1||Number(p.number)>30||p.cycle.length>30)return Response.json({error:"Invalid content slot"},{status:400});
+  const existing=await database().prepare("SELECT id FROM content WHERE client_id=? AND cycle=? AND number=?").bind(p.clientId,p.cycle,p.number).first();if(existing)return Response.json({ok:true,id:existing.id,alreadyExists:true});
   await database().prepare("INSERT INTO content (id,client_id,cycle,number,stage,updated_at) VALUES (?,?,?,?,?,?)").bind(id,p.clientId,p.cycle,p.number,"Idea",now).run();
  }else if(p.kind==="invoice"&&typeof p.clientId==="string"&&typeof p.cycle==="string"&&typeof p.amountDue==="number"){
+  if(!Number.isFinite(p.amountDue)||p.amountDue<0||Number(p.baseAmount||0)<0||Number(p.credit||0)<0)return Response.json({error:"Invalid invoice amount"},{status:400});
   await database().prepare("INSERT INTO invoices (id,client_id,cycle,type,base_amount,credit,amount_due,due_date,status,notes) VALUES (?,?,?,?,?,?,?,?,?,?)").bind(id,p.clientId,p.cycle,String(p.type||"Monthly"),Number(p.baseAmount||0),Number(p.credit||0),p.amountDue,p.dueDate||null,String(p.status||"Planned"),String(p.notes||"")).run();
  }else return Response.json({error:"Invalid record"},{status:400});
  await database().prepare("INSERT INTO events (id,kind,entity_id,at,details) VALUES (?,?,?,?,?)").bind(crypto.randomUUID(),"operator_create",id,now,String(p.kind)).run();
