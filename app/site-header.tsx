@@ -1,0 +1,5 @@
+"use client";
+import Link from "next/link";
+import { useState } from "react";
+const links=[["Home","/"],["Services","/services"],["How It Works","/#how-it-works"],["About","/#about"],["Portfolio","/#portfolio"],["Pricing","/#pricing"],["FAQ","/#faq"]];
+export default function Header(){const [open,setOpen]=useState(false);return <><header className="site-header"><div className="wrap nav-inner"><Link className="brand" href="/" onClick={()=>setOpen(false)}><img src="/nc-icon.webp" alt=""/><span><strong>New England Creatives</strong><small>Marketing made manageable.</small></span></Link><nav className={open?"nav open":"nav"} aria-label="Main navigation">{links.map(([label,href])=><Link key={label} href={href} onClick={()=>setOpen(false)}>{label}</Link>)}</nav><Link className="button nav-cta" href="/get-started">Get Started ↗</Link><button className="menu" aria-label={open?"Close menu":"Open menu"} aria-expanded={open} onClick={()=>setOpen(!open)}><span/><span/><span/></button></div></header><Link className="mobile-cta" href="/get-started">Get Started <span aria-hidden>↗</span></Link></>}

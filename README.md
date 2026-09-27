@@ -1,3 +1,6 @@
 # New England Creatives
 
-Website source and operating documentation for New England Creatives. The current production site is deployed through Sites; this repository is a source mirror. Business records and credentials are never stored here.
+Website source mirror for New England Creatives. The live site is deployed with Sites. Private client records, documents, and credentials are kept outside this public repository.
+
+## Setup
+Install dependencies with pnpm, generate migrations when the schema changes, and build with the bundled scripts. Runtime D1 binding and ADMIN_KEY are configured in hosting, never committed.
