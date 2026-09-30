@@ -16,7 +16,7 @@ export default function Dashboard(){
   setLoading(true);
   try{
    const r=await fetch("/api/admin",{cache:"no-store"});
-   if(!r.ok)throw new Error(r.status===401?"This ChatGPT account is not authorized for NEC operations.":"Unable to load records.");
+   if(!r.ok)throw new Error(r.status===401?"Your NEC admin session is not authorized.":"Unable to load records.");
    setData(await r.json())
   }catch(e){setError(String(e))}
   finally{setLoading(false)}
@@ -37,7 +37,7 @@ export default function Dashboard(){
    <OpsActions data={data} refresh={load} onError={setError}/>
    <div className="ops-tabs">{(["leads","clients","content","invoices","events"] as const).map(x=><button key={x} onClick={()=>setTab(x)} aria-pressed={tab===x}>{x} ({data[x].length})</button>)}</div>
    <div className="ops-table"><table><thead><tr>{Object.keys(data[tab][0]||{id:0}).map(x=><th key={x}>{x.replaceAll("_"," ")}</th>)}</tr></thead><tbody>{data[tab].map(row=><tr key={String(row.id)}>{Object.entries(row).map(([column,v])=><td key={column}>{column==="status"&&tab!=="events"?<select value={String(v||"")} aria-label={tab+" status"} onChange={e=>update(tab,String(row.id),column,e.target.value)}>{[String(v||""),...new Set(tab==="leads"?["Lead","Qualified","Proposal","Contract Sent","Signed","Activation Paid","Onboarding","Production","Active","Paused","Cancellation Pending","Closed"]:tab==="content"?["Idea","Brief","Draft","Design/Edit","Internal QA","Client Review","Revision","Approved","Scheduled","Published","Measured"]:tab==="invoices"?["Planned","Due","Paid","Overdue","Void"]:["Pending signature","Onboarding","Production","Active","Paused","Cancellation Pending","Closed"])].map(x=><option key={x}>{x}</option>)}</select>:String(v??"")}</td>)}</tr>)}</tbody></table></div>
-   <p>NEC operations are restricted to an authorized ChatGPT account.</p>
+   <p>NEC operations are restricted to the authorized owner.</p>
   </>}
  </div>
 }
