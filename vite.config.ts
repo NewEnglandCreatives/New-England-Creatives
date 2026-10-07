@@ -4,7 +4,7 @@ import hostingConfig from "./.openai/hosting.json";
 import { readExecutionProfile } from "./scripts/execution-profile.mjs";
 import { sites } from "./build/sites-vite-plugin";
 
-const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
+const NEC_DATABASE_ID =
   "14d4f9cf-9084-455e-ba34-114394a238ae";
 
 const { d1, r2 } = hostingConfig;
