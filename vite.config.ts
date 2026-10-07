@@ -21,7 +21,7 @@ const localBindingConfig = {
     ? [
         {
           binding: d1,
-          database_name: "new-england-creatives",
+          database_name: "new-england-creatives", 
           database_id: NEC_DATABASE_ID,
         },
       ]
